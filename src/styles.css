@@ -1,0 +1,194 @@
+:host, *, *::before, *::after, *::file-selector-button, *::-webkit-file-upload-button {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+:root {
+    --bg-color: #1e2124;
+    --text-color: #ffffff;
+    --toggle-track-off: #ccc;
+    --select-color: #2b2a33;
+}
+
+body.light-mode {
+    --bg-color: white;
+    --text-color: #1e2124;
+    --toggle-track-off: #444;
+    --select-color: #e9e9ed;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* needs top:0, left:0 to not have the wrapper move down and right a little*/
+.wrapper {
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+/* ------------- Dropdown ------------- */
+.sidebar {
+    display: flex;
+    width: 300px;
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar select:hover, .sidebar .rank-input:hover {
+    filter: brightness(0.8);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* show current selected tab */
+.sidebar .active {
+    filter: brightness(0.5);
+}
+
+.sidebar .tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.sidebar .tab-container button, .sidebar select, .sidebar .username-input {
+    appearance: none;
+    background-color: var(--select-color);
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 5px;
+}
+.sidebar .rank-input {
+    width: 30px;
+    appearance: none;
+    background-color: var(--select-color);
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.sidebar .option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar option {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.sidebar .rank-input::-webkit-inner-spin-button, .sidebar .rank-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* firefox */
+.sidebar .rank-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.graph-btn, #file-upload::file-selector-button {
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--select-color);
+    color: var(--text-color);
+    border-radius: 5px;
+}
+.graph-btn:hover, #file-upload::file-selector-button:hover {
+    filter: brightness(0.8);
+}
+/* ------------- Dropdown ------------- */
+
+/* ------------- Plot ------------- */
+#plot-container {
+    width: 100%;
+    aspect-ratio: 1.6 / 1;
+    min-height: 400px;
+    max-height: 90vh;
+    margin: 0 auto;
+}
+
+graphbutton:disabled {
+    background-color: #4b5563 !important;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.8;
+}
+/* ------------- Plot ------------- */
+.content-area {
+    width: 95%;
+    flex-grow: 1;
+}
+
+#note {
+    margin: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    bottom: 10px;
+}
+
+/* ------------- Toggle button ------------- */
+/* over head container for toggle and text */
+.toggle-group {
+    margin-top: auto; /* bottom */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 10px;
+}
+
+.toggle {
+    position: relative; /* stack properly*/
+    display: flex;
+    width: 50px;
+    height: 24px;
+}
+
+/* hide checkbox */
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* toggle track */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 24px;
+    width: 100%;
+    height: 100%;
+    transition: background-color 0.3s;
+}
+
+/* circle slider */
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle input:checked+.slider {
+    background-color: #4caf50;
+}
+
+.toggle input:checked+.slider::before {
+    transform: translateX(24px);
+}
+/* ------------- Toggle button ------------- */

@@ -1,0 +1,46 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: ["main"]
+
+  schedule:
+    - cron: "0 0 * * *" # 00:00 UTC
+
+  workflow_dispatch: #manual trigger
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: unbuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Fetch fresh API data
+        run: |
+          curl 'https://code.golf/scores/all-holes/all-langs/all' -o all.json
+      
+      - name: Setup pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifcat
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './src'
+      
+      - name: Deploy to github pages
+        id: deployment
+        uses: actions/deploy-pages@v4

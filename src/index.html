@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="header">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="tab-container">
+                <button class="tab-btn active" data-target="scatter">Scatter</button>
+                <button class="tab-btn" data-target="heatmap">Heatmap</button>
+            </div>
+
+            <div id="scatter" class="option-content">
+                <div class="dropdown">
+                    <label for="language">Language:</label>
+                    <select id="language"></select>
+                </div>
+
+                <div class="dropdown">
+                    <label for="hole">Hole:</label>
+                    <select id="hole"></select>
+                </div>
+
+                <div class="dropdown">
+                    <label for="medal">Medal type:</label>
+                    <select id="medal">
+                        <option value="golds">Golds</option>
+                        <option value="diamonds">Diamonds</option>
+                    </select>
+                </div>
+
+                <div class="dropdown">
+                    <label for="weight">Weight:</label>
+                    <select id="weight">
+                        <option value="all">All</option>
+                        <option value="per hole">per hole</option>
+                        <option value="per lang">per lang</option>
+                        <option value="per hole&lang">per hole&lang</option>
+                    </select>
+                </div>
+
+                <div class="dropdown">
+                    <label for="plot">Plot type:</label>
+                    <select id="plot">
+                        <option value="graph">Graph</option>
+                        <option value="stack">Stack</option>
+                    </select>
+                </div>
+                
+                <div class="rank-bounds">
+                    <label>Rank: </label>
+                    <input type="number" id="lowerBound" class="rank-input" value="1" min="1">
+                    <span> to </span>
+                    <input type="number" id="upperBound" class="rank-input" value="10" min="1">
+                </div>
+            </div>
+
+            <div id="heatmap" class="option-content hidden">
+                <div class="user">
+                    <label>Username: </label>
+                    <input id="username" class="username-input"></input>
+                </div>
+            </div>
+
+            <input type="file" class="file-btn" id="file-upload" accept=".json"/>
+
+            <button class="graph-btn" id="graph">Generate</button>
+
+            <div class="toggle-group">
+                <span>Dark Mode Toggle</span>
+                <label class="toggle">
+                    <input id="togglebox" type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <p id="status">Select options and click Generate</p>
+            <div id="plot-container"></div>
+        </main>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/arquero@latest"></script>
+    <script src="main.js"></script>
+    <script src="heatmap.js"></script>
+    <script src="scatter.js"></script>
+</body>
