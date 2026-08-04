@@ -147,7 +147,7 @@ async function generateGraph() {
     } else {
         try {
             // daily updated API json
-            const response = await fetch("./src/all.json");
+            const response = await fetch("./all.json");
             json = await response.json();
         } catch(error) {
             status.innerText = "Error fetching json";
