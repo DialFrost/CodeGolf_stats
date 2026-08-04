@@ -19,7 +19,7 @@ tabBtns.forEach(btn => {
     });
 });
 
-globalJson = null;
+let globalJson = null;
 const status = document.getElementById("status");
 const fileInput = document.getElementById("file-upload");
 fileInput.addEventListener("change", e => {
@@ -101,8 +101,8 @@ async function fetchApiOptions() {
         const holeData = await response1.json();
         const langData = await response2.json();
 
-        holes = holeData.filter(hole => !("experiment" in hole));
-        langs = langData.filter(lang => !("experiment" in lang));
+        let holes = holeData.filter(hole => !("experiment" in hole));
+        let langs = langData.filter(lang => !("experiment" in lang));
 
         const holeselect = document.getElementById("hole");
         ["All", ...holes].forEach(hole => {
@@ -139,7 +139,9 @@ function isInt(val) {
 async function generateGraph() {
     graphBtn.innerText = "Wait...";
     graphBtn.disabled = true;
+    status.innerText = "Processing...";
 
+    let json = null;
     if(globalJson) {
         json = globalJson;
     } else {
@@ -162,8 +164,8 @@ async function generateGraph() {
     const plotContainer = document.getElementById("plot-container");
 
     // error checking with bounds
-    lower = document.getElementById("lowerBound").value;
-    upper = document.getElementById("upperBound").value;
+    let lower = document.getElementById("lowerBound").value;
+    let upper = document.getElementById("upperBound").value;
 
     if(!isInt(lower) || !isInt(upper)) {
         status.innerText = "Error - Invalid rank bounds";
@@ -181,13 +183,11 @@ async function generateGraph() {
         return;
     }
 
-    status.innerText = "Processing...";
-
     const activeTab = document.querySelector(".tab-btn.active");
     const currMode = activeTab.getAttribute("data-target");
 
     if(currMode === "scatter") {
-        scatter(json);
+        scatter(json, lower, upper);
     } else if(currMode === "heatmap") {
         const user = document.getElementById("username").value;
         heatmap(json, user);

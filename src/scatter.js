@@ -1,4 +1,4 @@
-function scatter(json) {
+function scatter(json, lower, upper) {
     const lang = document.getElementById("language").value;
     const hole = document.getElementById("hole").value;
     const medal = document.getElementById("medal").value;
@@ -6,16 +6,16 @@ function scatter(json) {
     const plotType = document.getElementById("plot").value;
     const diamonds = medal === "diamonds";
 
-    writer = [];
-    current_record = {};
-    holes = [];
-    langs = [];
-    num_holes = 0;
-    num_langs = 0;
+    let writer = [];
+    let current_record = {};
+    let holes = [];
+    let langs = [];
+    let num_holes = 0;
+    let num_langs = 0;
 
     json.sort(d => Number(new Date(d.submitted))).forEach(row => {
-        time = Number(new Date(row.submitted));
-        key = [row.hole, row.lang];
+        let time = Number(new Date(row.submitted));
+        let key = [row.hole, row.lang];
         if((hole === "All" || row.hole === hole) && (lang === "All" || row.lang === lang)) {
             if(diamonds) {
                 // first submission for hole-lang combo
@@ -32,7 +32,7 @@ function scatter(json) {
                     writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
                 } else {
                     const curr_min = current_record[key]["min"];
-                    holders = current_record[key]["holders"];
+                    let holders = current_record[key]["holders"];
 
                     // diamond beaten
                     if(row.bytes < curr_min) {
@@ -75,7 +75,7 @@ function scatter(json) {
                     writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
                 } else {
                     const curr_min = current_record[key]["min"];
-                    holders = current_record[key]["holders"];
+                    let holders = current_record[key]["holders"];
                     // beat tied gold
                     if(row.bytes < curr_min) {
                         current_record[key]["holders"].forEach(old_holder => {
@@ -101,7 +101,7 @@ function scatter(json) {
     });
 
     // preparing data
-    dt = aq.from(writer);
+    const dt = aq.from(writer);
 
     const topN = dt
         .groupby("user")
@@ -109,14 +109,14 @@ function scatter(json) {
         .orderby(aq.desc("total"))
         .slice(lower-1, upper);
 
-    plot_df = dt
+    let plot_df = dt
         .semijoin(topN, "user")
         .groupby("time", "hole", "lang")
         .pivot("user", "change", { aggregate: aq.op.sum, fill: 0 })
         .ungroup()
         .orderby("time");
 
-    rows = plot_df.objects();
+    let rows = plot_df.objects();
     // cumsum - aq doesn"t support
     topN.array("user").forEach(user => {
         runningtotal = 0;
@@ -132,7 +132,7 @@ function scatter(json) {
     const holes_df = plot_df.array("hole");
     const langs_df = plot_df.array("lang");
 
-    traces = topN.array("user").map(user => {
+    let traces = topN.array("user").map(user => {
         const finalY = plot_df.array(user).map((val, index) => {
             if(weight === "per hole") return val / holes_df[index];
             else if(weight === "per lang") return val / langs_df[index];
@@ -140,7 +140,7 @@ function scatter(json) {
             return val;
         });
 
-        traces =  {
+        let traces =  {
             x: times,
             y: finalY,
             name: user,
@@ -160,7 +160,7 @@ function scatter(json) {
         return traces;
     });
 
-    title = "Bytes Golds";
+    let title = "Bytes Golds";
     if(diamonds) title = "Bytes Diamonds";
     if(weight === "per hole") title += " per hole";
     else if(weight === "per lang") title += " per lang";
