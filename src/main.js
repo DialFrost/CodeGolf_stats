@@ -77,8 +77,10 @@ toggle.addEventListener("change", () => {
         document.body.classList.remove("light-mode");
 
     const graph = document.querySelector(".js-plotly-plot");
-    const newTheme = getPlotTheme(graph.layout);
-    Plotly.react(graph, graph.data, newTheme);  
+    if(graph) {
+        const newTheme = getPlotTheme(graph.layout);
+        Plotly.react(graph, graph.data, newTheme);
+    }
 });
 
 async function fetchApiOptions() {
