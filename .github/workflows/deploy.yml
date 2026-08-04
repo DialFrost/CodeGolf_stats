@@ -31,7 +31,7 @@ jobs:
       
       - name: Fetch fresh API data
         run: |
-          curl 'https://code.golf/scores/all-holes/all-langs/all' -o all.json
+          curl 'https://code.golf/scores/all-holes/all-langs/all' -o ./src/all.json
       
       - name: Setup pages
         uses: actions/configure-pages@v4

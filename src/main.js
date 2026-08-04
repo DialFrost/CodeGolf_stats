@@ -1,15 +1,15 @@
-const btn = document.getElementById("graph");
+const graphBtn = document.getElementById("graph");
 
-const buttons = document.querySelectorAll(".tab-btn");
+const tabBtns = document.querySelectorAll(".tab-btn");
 const contents = document.querySelectorAll(".option-content");
 
 // tab buttons
-buttons.forEach(button => {
-    button.addEventListener("click", () => {
-        const target = button.getAttribute("data-target");
+tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-target");
 
-        buttons.forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
+        tabBtns.forEach(btn => btn.classList.remove("active"));
+        btn.classList.add("active");
 
         contents.forEach(content => {
             content.classList.add("hidden");
@@ -38,7 +38,7 @@ fileInput.addEventListener("change", e => {
     }
 });
 
-btn.addEventListener("click", () => {
+graphBtn.addEventListener("click", () => {
     // clear previous graph
     Plotly.purge("plot-container");
     generateGraph();
@@ -83,7 +83,7 @@ toggle.addEventListener("change", () => {
 
 async function fetchApiOptions() {
     // don't allow user to generate graph without options loaded
-    btn.disabled = true;
+    graphBtn.disabled = true;
 
     try {
         const [response1, response2] = await Promise.all([
@@ -118,10 +118,10 @@ async function fetchApiOptions() {
             langselect.appendChild(option);
         });
 
-        btn.disabled = false;
+        graphBtn.disabled = false;
         return [holes.map(hole => hole["id"]), langs.map(lang => lang["id"])];
     } catch (error) {
-        btn.disabled = false;
+        graphBtn.disabled = false;
         console.log("Error:", error);
     }
 }
@@ -135,16 +135,23 @@ function isInt(val) {
 }
 
 async function generateGraph() {
-    btn.innerText = "Wait...";
-    btn.disabled = true;
+    graphBtn.innerText = "Wait...";
+    graphBtn.disabled = true;
 
     if(globalJson) {
         json = globalJson.filter(d => d.scoring === "bytes")
             .filter(d => holesArr.includes(d.hole))
             .filter(d => langsArr.includes(d.lang));
     } else {
-        // daily updated API json
-        json = await fetch("./all.json");
+        try {
+            // daily updated API json
+            json = await fetch("./all.json");
+        } catch(error) {
+            status.innerText = "Error fetching json";
+            graphBtn.innerText = "Generate";
+            graphBtn.disabled = false;
+            return;
+        }
     }
 
     const plotContainer = document.getElementById("plot-container");
@@ -181,6 +188,6 @@ async function generateGraph() {
         heatmap(json, user);
     }
     
-    btn.disabled = false;
-    btn.innerText = "Generate";
+    graphBtn.disabled = false;
+    graphBtn.innerText = "Generate";
 }
