@@ -141,9 +141,7 @@ async function generateGraph() {
     graphBtn.disabled = true;
 
     if(globalJson) {
-        json = globalJson.filter(d => d.scoring === "bytes")
-            .filter(d => holesArr.includes(d.hole))
-            .filter(d => langsArr.includes(d.lang));
+        json = globalJson;
     } else {
         try {
             // daily updated API json
@@ -156,6 +154,10 @@ async function generateGraph() {
             return;
         }
     }
+
+    json = json.filter(d => d.scoring === "bytes")
+            .filter(d => holesArr.includes(d.hole))
+            .filter(d => langsArr.includes(d.lang));
 
     const plotContainer = document.getElementById("plot-container");
 
