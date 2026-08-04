@@ -13,7 +13,7 @@ function scatter(json, lower, upper) {
     let num_holes = 0;
     let num_langs = 0;
 
-    json.sort(d => Number(new Date(d.submitted))).forEach(row => {
+    json.sort((a, b) => Number(new Date(a.submitted)) - Number(new Date(b.submitted))).forEach(row => {
         let time = Number(new Date(row.submitted));
         let key = [row.hole, row.lang];
         if((hole === "All" || row.hole === hole) && (lang === "All" || row.lang === lang)) {
