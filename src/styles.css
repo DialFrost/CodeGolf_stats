@@ -56,7 +56,7 @@ body {
 .sidebar .tab-container {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .sidebar .tab-container button, .sidebar select, .sidebar .username-input {

@@ -1,6 +1,6 @@
 function scatter(json, lower, upper) {
-    const lang = document.getElementById("language").value;
-    const hole = document.getElementById("hole").value;
+    const lang = document.querySelector("#scatter .language").value;
+    const hole = document.querySelector("#scatter .hole").value;
     const medal = document.getElementById("medal").value;
     const weight = document.getElementById("weight").value;
     const plotType = document.getElementById("plot").value;
@@ -13,91 +13,94 @@ function scatter(json, lower, upper) {
     let num_holes = 0;
     let num_langs = 0;
 
-    json.sort((a, b) => Number(new Date(a.submitted)) - Number(new Date(b.submitted))).forEach(row => {
-        let time = Number(new Date(row.submitted));
-        let key = [row.hole, row.lang];
-        if((hole === "All" || row.hole === hole) && (lang === "All" || row.lang === lang)) {
-            if(diamonds) {
-                // first submission for hole-lang combo
-                if(!(key.toString() in current_record)) {
-                    current_record[key] = {"min": row.bytes, "holders": [row.login]};
-                    if(!holes.includes(row.hole)) {
-                        num_holes++;
-                        holes.push(row.hole);
-                    }
-                    if(!langs.includes(row.lang)) {
-                        num_langs++;
-                        langs.push(row.lang);
-                    }
-                    writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
-                } else {
-                    const curr_min = current_record[key]["min"];
-                    let holders = current_record[key]["holders"];
+    if(hole !== "All")
+        json = json.filter(d => d.hole === hole);
+    if(lang !== "All")
+        json = json.filter(d => d.hole === hole);
 
-                    // diamond beaten
-                    if(row.bytes < curr_min) {
-                        // case 1 - sole holder
-                        if(holders.length == 1) {
-                            if(row.login !== holders[0]) {
-                                writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
-                                writer.push({"user": holders[0], "change": -1, "time": time, "hole": num_holes, "lang": num_langs});
-                            }
-                            current_record[key] = {"min": row.bytes, "holders": [row.login]};
-                        }
-                        // case 2 - >1 holder
-                        else {
+    json.sort((a, b) => Number(new Date(a.submitted)) - Number(new Date(b.submitted))).forEach(row => {
+        let time = row.submitted;
+        let key = [row.hole, row.lang];
+        if(diamonds) {
+            // first submission for hole-lang combo
+            if(current_record[key] === undefined) {
+                current_record[key] = {"min": row.bytes, "holders": [row.login]};
+                if(!holes.includes(row.hole)) {
+                    num_holes++;
+                    holes.push(row.hole);
+                }
+                if(!langs.includes(row.lang)) {
+                    num_langs++;
+                    langs.push(row.lang);
+                }
+                writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
+            } else {
+                const curr_min = current_record[key]["min"];
+                let holders = current_record[key]["holders"];
+
+                // diamond beaten
+                if(row.bytes < curr_min) {
+                    // case 1 - sole holder
+                    if(holders.length == 1) {
+                        if(row.login !== holders[0]) {
                             writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
-                            current_record[key] = {"min": row.bytes, "holders": [row.login]};
-                        }
-                    }
-                    // tie diamond
-                    else if(row.bytes == curr_min) {
-                        if(holders.length == 1 && row.login !== holders[0]) {
                             writer.push({"user": holders[0], "change": -1, "time": time, "hole": num_holes, "lang": num_langs});
                         }
-                        if(!holders.includes(row.login)) {
-                            holders.push(row.login);
-                        }
+                        current_record[key] = {"min": row.bytes, "holders": [row.login]};
                     }
-                } // if(!(key in current_record))
+                    // case 2 - >1 holder
+                    else {
+                        writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
+                        current_record[key] = {"min": row.bytes, "holders": [row.login]};
+                    }
+                }
+                // tie diamond
+                else if(row.bytes == curr_min) {
+                    if(holders.length == 1 && row.login !== holders[0]) {
+                        writer.push({"user": holders[0], "change": -1, "time": time, "hole": num_holes, "lang": num_langs});
+                    }
+                    if(!holders.includes(row.login)) {
+                        holders.push(row.login);
+                    }
+                }
+            } // if(!(key in current_record))
+        } else {
+            // first submission for hole-lang combo
+            if(current_record[key] === undefined) {
+                current_record[key] = {"min": row.bytes, "holders": [row.login]};
+                if(!holes.includes(row.hole)) {
+                    num_holes++;
+                    holes.push(row.hole);
+                }
+                if(!langs.includes(row.lang)) {
+                    num_langs++;
+                    langs.push(row.lang);
+                }
+                writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
             } else {
-                // first submission for hole-lang combo
-                if(!(key.toString() in current_record)) {
-                    current_record[key] = {"min": row.bytes, "holders": [row.login]};
-                    if(!holes.includes(row.hole)) {
-                        num_holes++;
-                        holes.push(row.hole);
-                    }
-                    if(!langs.includes(row.lang)) {
-                        num_langs++;
-                        langs.push(row.lang);
-                    }
-                    writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
-                } else {
-                    const curr_min = current_record[key]["min"];
-                    let holders = current_record[key]["holders"];
-                    // beat tied gold
-                    if(row.bytes < curr_min) {
-                        current_record[key]["holders"].forEach(old_holder => {
-                            if(row.login !== old_holder) {
-                                writer.push({"user": old_holder, "change": -1, "time": time, "hole": num_holes, "lang": num_langs});
-                            }
-                        });
-                        if(!holders.includes(row.login)) {
-                            writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
+                const curr_min = current_record[key]["min"];
+                let holders = current_record[key]["holders"];
+                // beat tied gold
+                if(row.bytes < curr_min) {
+                    current_record[key]["holders"].forEach(old_holder => {
+                        if(row.login !== old_holder) {
+                            writer.push({"user": old_holder, "change": -1, "time": time, "hole": num_holes, "lang": num_langs});
                         }
-                        current_record[key] = {"min": row.bytes, "holders": [row.login]}
+                    });
+                    if(!holders.includes(row.login)) {
+                        writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
                     }
-                    // tie tied gold
-                    else if(row.bytes == curr_min) {
-                        if(!holders.includes(row.login)) {
-                            holders.push(row.login);
-                            writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
-                        }
+                    current_record[key] = {"min": row.bytes, "holders": [row.login]}
+                }
+                // tie tied gold
+                else if(row.bytes == curr_min) {
+                    if(!holders.includes(row.login)) {
+                        holders.push(row.login);
+                        writer.push({"user": row.login, "change": 1, "time": time, "hole": num_holes, "lang": num_langs});
                     }
-                } // if(!(key in current_record))
-            } // if diamonds
-        }
+                }
+            } // if(!(key in current_record))
+        } // if diamonds
     });
 
     // preparing data

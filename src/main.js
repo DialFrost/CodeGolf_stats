@@ -41,7 +41,11 @@ fileInput.addEventListener("change", e => {
 graphBtn.addEventListener("click", () => {
     // clear previous graph
     Plotly.purge("plot-container");
-    generateGraph();
+    status.innerText = "Processing...";
+    setTimeout(() => {
+        generateGraph();
+        status.innerText = "";
+    }, 20);
 });
 
 function getPlotTheme(layout) {
@@ -104,20 +108,24 @@ async function fetchApiOptions() {
         let holes = holeData.filter(hole => !("experiment" in hole));
         let langs = langData.filter(lang => !("experiment" in lang));
 
-        const holeselect = document.getElementById("hole");
-        ["All", ...holes].forEach(hole => {
-            const option = document.createElement("option");
-            option.value = hole === "All" ? "All" : hole["id"];
-            option.text = hole === "All" ? "All" : hole["name"];
-            holeselect.appendChild(option);
+        const holeselects = document.querySelectorAll(".hole");
+        holeselects.forEach(holeselect => {
+            ["All", ...holes].forEach(hole => {
+                const option = document.createElement("option");
+                option.value = hole === "All" ? "All" : hole["id"];
+                option.text = hole === "All" ? "All" : hole["name"];
+                holeselect.appendChild(option);
+            });
         });
 
-        const langselect = document.getElementById("language");
-        ["All", ...langs].forEach(lang => {
-            const option = document.createElement("option");
-            option.value = lang === "All" ? "All" : lang["id"];
-            option.text = lang === "All" ? "All" : lang["name"];
-            langselect.appendChild(option);
+        const langselects = document.querySelectorAll(".language");
+        langselects.forEach(langselect => {
+            ["All", ...langs].forEach(lang => {
+                const option = document.createElement("option");
+                option.value = lang === "All" ? "All" : lang["id"];
+                option.text = lang === "All" ? "All" : lang["name"];
+                langselect.appendChild(option);
+            });
         });
 
         graphBtn.disabled = false;
@@ -161,36 +169,36 @@ async function generateGraph() {
             .filter(d => holesArr.includes(d.hole))
             .filter(d => langsArr.includes(d.lang));
 
-    const plotContainer = document.getElementById("plot-container");
-
-    // error checking with bounds
-    let lower = document.getElementById("lowerBound").value;
-    let upper = document.getElementById("upperBound").value;
-
-    if(!isInt(lower) || !isInt(upper)) {
-        status.innerText = "Error - Invalid rank bounds";
-        return;
-    }
-
-    lower = parseInt(lower);
-    upper = parseInt(upper);
-    if(Math.abs(upper - lower) > 30) {
-        status.innerText = "Error - Invalid rank bounds (keep difference<30)";
-        return;
-    }
-    if(lower<1 || upper<1 || lower > upper) {
-        status.innerText = "Error - Invalid rank bounds";
-        return;
-    }
-
     const activeTab = document.querySelector(".tab-btn.active");
     const currMode = activeTab.getAttribute("data-target");
 
     if(currMode === "scatter") {
+        // error checking with bounds
+        let lower = document.getElementById("lowerBound").value;
+        let upper = document.getElementById("upperBound").value;
+
+        if(!isInt(lower) || !isInt(upper)) {
+            status.innerText = "Error - Invalid rank bounds";
+            return;
+        }
+
+        lower = parseInt(lower);
+        upper = parseInt(upper);
+        if(Math.abs(upper - lower) > 30) {
+            status.innerText = "Error - Invalid rank bounds (keep difference<30)";
+            return;
+        }
+        if(lower<1 || upper<1 || lower > upper) {
+            status.innerText = "Error - Invalid rank bounds";
+            return;
+        }
+
         scatter(json, lower, upper);
     } else if(currMode === "heatmap") {
         const user = document.getElementById("username").value;
         heatmap(json, user);
+    } else if(currMode === "deflation") {
+        deflation(json);
     }
     
     graphBtn.disabled = false;

@@ -12,17 +12,18 @@
             <div class="tab-container">
                 <button class="tab-btn active" data-target="scatter">Scatter</button>
                 <button class="tab-btn" data-target="heatmap">Heatmap</button>
+                <button class="tab-btn" data-target="deflation">Deflation</button>
             </div>
 
             <div id="scatter" class="option-content">
                 <div class="dropdown">
                     <label for="language">Language:</label>
-                    <select id="language"></select>
+                    <select class="language"></select>
                 </div>
 
                 <div class="dropdown">
                     <label for="hole">Hole:</label>
-                    <select id="hole"></select>
+                    <select class="hole"></select>
                 </div>
 
                 <div class="dropdown">
@@ -66,6 +67,18 @@
                 </div>
             </div>
 
+            <div id="deflation" class="option-content hidden">
+                <div class="dropdown">
+                    <label for="language">Language:</label>
+                    <select class="language"></select>
+                </div>
+
+                <div class="dropdown">
+                    <label for="hole">Hole:</label>
+                    <select class="hole"></select>
+                </div>
+            </div>
+
             <input type="file" class="file-btn" id="file-upload" accept=".json"/>
 
             <button class="graph-btn" id="graph">Generate</button>
@@ -90,4 +103,5 @@
     <script src="main.js"></script>
     <script src="heatmap.js"></script>
     <script src="scatter.js"></script>
+    <script src="deflation.js"></script>
 </body>
