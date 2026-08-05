@@ -38,14 +38,8 @@ fileInput.addEventListener("change", e => {
     }
 });
 
-graphBtn.addEventListener("click", () => {
-    // clear previous graph
-    Plotly.purge("plot-container");
-    status.innerText = "Processing...";
-    setTimeout(() => {
-        generateGraph();
-        status.innerText = "";
-    }, 20);
+graphBtn.addEventListener("click", async () => {
+    generateGraph();
 });
 
 function getPlotTheme(layout) {
@@ -145,9 +139,13 @@ function isInt(val) {
 }
 
 async function generateGraph() {
+    // clear previous graph
+    Plotly.purge("plot-container");
     graphBtn.innerText = "Wait...";
     graphBtn.disabled = true;
     status.innerText = "Processing...";
+
+    await new Promise(r => setTimeout(r, 50));
 
     let json = null;
     if(globalJson) {
@@ -203,4 +201,5 @@ async function generateGraph() {
     
     graphBtn.disabled = false;
     graphBtn.innerText = "Generate";
+    status.innerText = "";
 }

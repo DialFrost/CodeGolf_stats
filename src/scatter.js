@@ -103,6 +103,11 @@ function scatter(json, lower, upper) {
         } // if diamonds
     });
 
+    if(writer.length > 0)
+        status.innerText = "";
+    else
+        status.innerText = "There is no data for these options!";
+
     // preparing data
     const dt = aq.from(writer);
 
@@ -196,9 +201,4 @@ function scatter(json, lower, upper) {
 
     const themedLayout = getPlotTheme(layout);
     Plotly.newPlot("plot-container", traces, themedLayout, { responsive: true });
-
-    if(writer.length > 0)
-        status.innerText = "";
-    else
-        status.innerText = "There is no data for these options!";
 }
