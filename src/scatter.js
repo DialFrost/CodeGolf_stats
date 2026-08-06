@@ -16,7 +16,7 @@ function scatter(json, lower, upper) {
     if(hole !== "All")
         json = json.filter(d => d.hole === hole);
     if(lang !== "All")
-        json = json.filter(d => d.hole === hole);
+        json = json.filter(d => d.lang === lang);
 
     json.sort((a, b) => Number(new Date(a.submitted)) - Number(new Date(b.submitted))).forEach(row => {
         let time = row.submitted;
