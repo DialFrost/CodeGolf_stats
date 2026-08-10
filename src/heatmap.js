@@ -5,6 +5,9 @@ function heatmap(json, user) {
         return;
     }
 
+    document.querySelector(".table-container").classList.add("hidden");
+    document.getElementById("plot-container").classList.remove("hidden");
+
     // find best score per hole/lang
     const bestScores = new Map();
     json.forEach(d => {
@@ -70,6 +73,9 @@ function heatmap(json, user) {
             y: 1,
             yanchor: "bottom",
             pad: { t: 10, b: 20 }},
+        font: {
+            family: "'Source Code Pro', monospace"
+        },
         paper_bgcolor: "transparent",
         plot_bgcolor: "transparent",
         xaxis: { side: "bottom", tickangle: 45, tickfont: { size: 9 } },

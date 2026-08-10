@@ -1,4 +1,7 @@
 function deflation(json) {
+    document.querySelector(".table-container").classList.add("hidden");
+    document.getElementById("plot-container").classList.remove("hidden");
+    
     const lang = document.querySelector("#deflation .language").value;
     const hole = document.querySelector("#deflation .hole").value;
 
@@ -31,6 +34,9 @@ function deflation(json) {
     };
     
     const layout = {
+        font: {
+            family: "'Source Code Pro', monospace"
+        },
         paper_bgcolor: "transparent",
         plot_bgcolor: "transparent",
         margin: { l: 60, r: 10, t: 30, b: 40, pad: 0 },

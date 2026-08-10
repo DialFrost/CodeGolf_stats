@@ -1,4 +1,7 @@
 function scatter(json, lower, upper) {
+    document.querySelector(".table-container").classList.add("hidden");
+    document.getElementById("plot-container").classList.remove("hidden");
+
     const lang = document.querySelector("#scatter .language").value;
     const hole = document.querySelector("#scatter .hole").value;
     const medal = document.getElementById("medal").value;
@@ -175,6 +178,9 @@ function scatter(json, lower, upper) {
     else if(weight === "per hole&lang") title += " per hole&lang";
 
     const layout = {
+        font: {
+            family: "'Source Code Pro', monospace"
+        },
         paper_bgcolor: "transparent",
         plot_bgcolor: "transparent",
         margin: { l: 60, r: 10, t: 30, b: 40, pad: 0 },

@@ -141,6 +141,8 @@ function isInt(val) {
 async function generateGraph() {
     // clear previous graph
     Plotly.purge("plot-container");
+    document.querySelector(".table-container").classList.add("hidden");
+
     graphBtn.innerText = "Wait...";
     graphBtn.disabled = true;
     status.innerText = "Processing...";
@@ -193,13 +195,17 @@ async function generateGraph() {
 
         scatter(json, lower, upper);
     } else if(currMode === "heatmap") {
-        const user = document.getElementById("username").value;
+        const user = document.querySelector("#heatmap .username").value;
         heatmap(json, user);
     } else if(currMode === "deflation") {
         deflation(json);
+    } else if(currMode === "golds-lost") {
+        const user = document.querySelector("#golds-lost .username").value;
+        goldsLost(json, user);
     }
     
     graphBtn.disabled = false;
     graphBtn.innerText = "Generate";
-    status.innerText = "";
+    if(status.innerText === "Processing...")
+        status.innerText = "";
 }

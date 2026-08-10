@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -13,6 +16,7 @@
                 <button class="tab-btn active" data-target="scatter">Scatter</button>
                 <button class="tab-btn" data-target="heatmap">Heatmap</button>
                 <button class="tab-btn" data-target="deflation">Deflation</button>
+                <button class="tab-btn" data-target="golds-lost">Golds Lost</button>
             </div>
 
             <div id="scatter" class="option-content">
@@ -63,7 +67,7 @@
             <div id="heatmap" class="option-content hidden">
                 <div class="user">
                     <label>Username: </label>
-                    <input id="username" class="username-input"></input>
+                    <input class="username"></input>
                 </div>
             </div>
 
@@ -76,6 +80,21 @@
                 <div class="dropdown">
                     <label for="hole">Hole:</label>
                     <select class="hole"></select>
+                </div>
+            </div>
+
+            <div id="golds-lost" class="option-content hidden">
+                <div class="user">
+                    <label>Username: </label>
+                    <input class="username"></input>
+                </div>
+                <div class="dropdown">
+                    <label for="table">Medals type:</label>
+                    <select id="table">
+                        <option value="all">All</option>
+                        <option value="gold">Golds</option>
+                        <option value="diamond">Diamonds</option>
+                    </select>
                 </div>
             </div>
 
@@ -95,6 +114,27 @@
         <main class="content-area">
             <p id="status">Select options and click Generate</p>
             <div id="plot-container"></div>
+            <div class="table-container hidden">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Lost</th>
+                            <th>Hole</th>
+                            <th>Lang</th>
+                            <th>Change</th>
+                            <th>User</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+
+                <div id="pagination">
+                    <button id="prevPage">Previous</button>
+                    <span id="pageInfo">Page 1 of 10</span>
+                    <button id="nextPage">Next</button>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -104,4 +144,5 @@
     <script src="heatmap.js"></script>
     <script src="scatter.js"></script>
     <script src="deflation.js"></script>
+    <script src="goldsLost.js"></script>
 </body>

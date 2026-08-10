@@ -9,6 +9,11 @@
     --select-color: #2b2a33;
 }
 
+html, body, button, input, select {
+    font-family: "Source Code Pro", monospace;
+    font-size: 12px;
+}
+
 body.light-mode {
     --bg-color: white;
     --text-color: #1e2124;
@@ -34,7 +39,7 @@ body {
 /* ------------- Dropdown ------------- */
 .sidebar {
     display: flex;
-    width: 300px;
+    width: 355px;
     padding: 20px;
     flex-direction: column;
     gap: 15px;
@@ -55,11 +60,20 @@ body {
 
 .sidebar .tab-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
+    width: 100%;
 }
 
-.sidebar .tab-container button, .sidebar select, .sidebar .username-input {
+.tab-container button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 1px 8px;
+    text-align: center;
+}
+
+.sidebar .tab-container button, .sidebar select, .sidebar .username {
     appearance: none;
     background-color: var(--select-color);
     color: var(--text-color);
@@ -79,6 +93,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .sidebar option {
@@ -134,6 +149,59 @@ graphbutton:disabled {
     text-align: center;
     width: 100%;
     bottom: 10px;
+}
+
+/* ------------- Table ------------- */
+.table-container {
+    width: 70%;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+.data-table th, td {
+    /* don't use any vertical padding */
+    padding: 0px 10px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.data-table th {
+    font-size: 14px;
+}
+td a {
+    color: inherit;
+}
+/* random % that looks nice */
+th:nth-child(1), td:nth-child(1) { width: 5%; }
+th:nth-child(2), td:nth-child(2) { width: 20%; }
+th:nth-child(3), td:nth-child(3) { width: 13%; }
+th:nth-child(4), td:nth-child(4) { width: 13%; }
+th:nth-child(5), td:nth-child(5) { width: 16%; }
+th:nth-child(6), td:nth-child(6) { width: 10%; }
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    gap: 7px;
+}
+#pagination button {
+    appearance: none;
+    background-color: var(--select-color);
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 /* ------------- Toggle button ------------- */
