@@ -160,6 +160,7 @@ table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    min-width: 600px;
 }
 .data-table th, td {
     /* don't use any vertical padding */

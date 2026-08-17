@@ -198,7 +198,8 @@ async function generateGraph() {
         const user = document.querySelector("#heatmap .username").value;
         heatmap(json, user);
     } else if(currMode === "deflation") {
-        deflation(json);
+        const user = document.querySelector("#deflation .username").value;
+        deflation(json, user);
     } else if(currMode === "golds-lost") {
         const user = document.querySelector("#golds-lost .username").value;
         goldsLost(json, user);

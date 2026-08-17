@@ -1,4 +1,10 @@
-function deflation(json) {
+function deflation(json, user) {
+    const userMatch = json.find(d => d.login === user);
+    if(!userMatch) {
+        status.innerText = "Error: no user found";
+        return;
+    }
+
     document.querySelector(".table-container").classList.add("hidden");
     document.getElementById("plot-container").classList.remove("hidden");
     
@@ -13,6 +19,8 @@ function deflation(json) {
         json = json.filter(d => d.hole === hole);
     if(lang !== "All")
         json = json.filter(d => d.lang === lang);
+    if(user !== "")
+        json = json.filter(d => d.login === user);
 
     json
         .sort((a, b) => Number(new Date(a.submitted)) - Number(new Date(b.submitted)))
